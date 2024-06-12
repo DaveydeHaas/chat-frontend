@@ -12,8 +12,8 @@ const routes = [
     beforeEnter: (to, from, next) => {
       // Implement your redirection logic here
       if (localStorage.getItem('token')) {
-        // Redirect authenticated users to the home page
-        next({ name: '' });
+        // Redirect authenticated users to the list of chatrooms page
+        next({ name: '/' });
       } else {
         // Redirect unauthenticated users to the login page
         next({ name: 'Login' });
@@ -28,13 +28,11 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  // Your existing navigation guard logic
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (!localStorage.getItem('token')) {
-      next({ name: 'Login' });
-    } else {
-      next();
-    }
+  const isAuthenticated = !!localStorage.getItem('token');
+  if (isAuthenticated && !to.meta.requiresAuth) {
+    next({ name: '' });
+  } else if (!isAuthenticated && to.meta.requiresAuth) {
+    next({ name: 'Login' });
   } else {
     next();
   }

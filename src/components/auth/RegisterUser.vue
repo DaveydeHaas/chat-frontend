@@ -17,7 +17,7 @@
               <input v-model="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password" required>
             </div>
             <div class="mb-2">
-              <a href="">Already have an account? Login here.</a>
+                <router-link to="/login">Already have an account? Login here.</router-link>
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
           </form>
@@ -29,11 +29,11 @@
   <script setup>
   import { ref } from 'vue';
   import { useRouter } from 'vue-router';
-  import useUsers from '@/composables/users';
+  import useAuth from '@/composables/auth';
   
   const router = useRouter();
   
-  const { createUser } = useUsers();
+  const { createUser } = useAuth();
   
   const email = ref('');
   const password = ref('');
