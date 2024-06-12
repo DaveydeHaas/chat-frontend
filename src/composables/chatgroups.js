@@ -1,8 +1,7 @@
-// src/composables/useSomeComposable.js
 import axios from 'axios';
 import { buildAuthorizationHeader } from '../services/tokenService';
 
-export default function useSomeComposable() {
+export default function useChatgroups() {
   // Use the buildAuthorizationHeader function to generate the Authorization header
   const authorizationHeader = buildAuthorizationHeader();
 

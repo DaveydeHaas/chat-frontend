@@ -1,0 +1,14 @@
+.btn-primary {
+    background-color: #04AA6D !important;
+    border-radius: 5px;
+    font-size: 17px;
+    font-family: 'Source Sans Pro', sans-serif;
+    padding: 6px, 18px; 
+    border-width: 0px !important;
+    border-color: #04AA6D !important;
+}
+
+.btn-primary:hover {
+    box-shadow: none;
+    background-color: #059862 !important;
+}
