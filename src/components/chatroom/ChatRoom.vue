@@ -30,16 +30,20 @@
                 'message-item': true,
                 'my-message': msg.userId === currentUser.id,
                 'other-message': msg.userId !== currentUser.id,
+                'center-message': msg.userId === 0,
               }"
             >
               <div
-                v-if="msg.userId !== currentUser.id"
+                v-if="msg.userId !== currentUser.id && msg.userId !== 0"
                 :style="{ color: userColors[msg.userId] }"
                 class="name"
               >
                 {{ msg.name }}
               </div>
-              <div class="message-blob">{{ msg.text }}</div>
+              <div v-if="msg.userId !== 0" class="message-blob">
+                {{ msg.text }}
+              </div>
+              <div v-else class="centered-text">{{ msg.text }}</div>
             </li>
           </ul>
         </div>
@@ -130,10 +134,10 @@ onMounted(async () => {
       userColors.value[msg.userId] = getRandomColor();
     }
     messages.value.push(msg);
-    console.log(messages.value);
   });
 
   socket.on("online users", (users) => {
+    console.log(users);
     activeUsers.value = users.filter(
       (user) => user.id !== currentUser.value.id
     );
@@ -192,6 +196,10 @@ onBeforeUnmount(() => {
   text-align: left;
 }
 
+.center-message {
+  text-align: center;
+}
+
 .name {
   font-weight: bold;
 }
@@ -209,6 +217,10 @@ onBeforeUnmount(() => {
   color: white;
   max-width: 70%;
   margin-right: 10px;
+}
+
+.centered-text {
+  font-style: italic;
 }
 
 .message-input-form {
