@@ -6,7 +6,7 @@
           <p>Active Users:</p>
           <ul>
             <li v-for="user in activeUsers" :key="user.id">
-              {{ user.name }}
+              {{ user.name }} <!-- I want "is typing...." here when that user is typing -->
               <hr />
             </li>
           </ul>
@@ -76,6 +76,7 @@ import io from "socket.io-client";
 import { useAuthStore } from "@/stores/auth";
 import { defineProps } from "vue";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
 const props = defineProps({
   id: {
@@ -86,7 +87,8 @@ const props = defineProps({
 
 const authStore = useAuthStore();
 const router = useRouter();
-const { chatroom, getChatroomById } = useChatrooms();
+const toast = useToast();
+const { chatroom, getChatroomById, saveMessage } = useChatrooms();
 const currentUser = ref({});
 const messages = ref([]);
 const message = ref("");
@@ -96,12 +98,24 @@ const typingUsers = ref([]);
 const userColors = ref({});
 
 const sendMessage = () => {
-  socket.emit("chat message", {
-    text: message.value,
-    name: currentUser.value.name,
-    userId: currentUser.value.id,
-  });
-  message.value = "";
+  try{
+    const data = {
+      text: message.value,
+      name: currentUser.value.name,
+      userId: currentUser.value.id,
+      chatroomId: props.id,
+      }
+      // todo check if message is send
+      socket.emit("chat message", data);
+      saveMessage(data);
+      message.value = "";
+  } catch (error) {
+    toast.error('Somethig went wrong while trying to send a message.', {
+        position: 'bottom-right'
+      });
+
+      throw error;
+  }
 };
 
 const sendTypingEvent = (isTyping) => {
@@ -129,6 +143,8 @@ onMounted(async () => {
 
   socket = io("http://localhost:3000");
 
+  socket.emit("set username", currentUser.value.name);
+
   socket.on("chat message", (msg) => {
     if (!userColors.value[msg.userId]) {
       userColors.value[msg.userId] = getRandomColor();
@@ -137,17 +153,21 @@ onMounted(async () => {
   });
 
   socket.on("online users", (users) => {
-    console.log(users);
     activeUsers.value = users.filter(
       (user) => user.id !== currentUser.value.id
     );
   });
 
   socket.on("typing", ({ id, isTyping }) => {
-    if (isTyping) {
-      typingUsers.value.push(activeUsers.value.find((user) => user.id === id));
-    } else {
-      typingUsers.value = typingUsers.value.filter((user) => user.id !== id);
+    const user = activeUsers.value.find((user) => user.id === id);
+    if (user) {
+      if (isTyping) {
+        if (!typingUsers.value.some((typingUser) => typingUser.id === id)) {
+          typingUsers.value.push(user);
+        }
+      } else {
+        typingUsers.value = typingUsers.value.filter((user) => user.id !== id);
+      }
     }
   });
 });
@@ -240,11 +260,10 @@ onBeforeUnmount(() => {
   background-color: #f5f5f5;
 }
 .scroll::-webkit-scrollbar {
-  width: 10px;
-  background-color: #f5f5f5;
+  width: 7px;
+  background: #f5f5f5;
 }
 .scroll::-webkit-scrollbar-thumb {
-  background-color: #666666;
-  border: 2px solid #797979;
+  background: #ccc;
 }
 </style>

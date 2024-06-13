@@ -68,11 +68,20 @@ export default function useChatrooms() {
     }
   }
 
+  const saveMessage = async (message) => {
+      await axios.post(`${API_BASE_URL}/sendMessage`, {message},{
+          headers: {
+            Authorization: `Bearer ${authStore.token}`,
+          },
+      });
+  }
+
   return {
     chatroom,
     chatrooms,
     getChatrooms,
     getChatroomById,
-    joinChatroomById
+    joinChatroomById,
+    saveMessage
   };
 }
