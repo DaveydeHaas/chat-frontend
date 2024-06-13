@@ -50,10 +50,10 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+//import { useRouter } from "vue-router";
 import useAuth from "@/composables/auth";
 
-const router = useRouter();
+//const router = useRouter();
 const { login } = useAuth();
 
 const email = ref("");
@@ -78,7 +78,8 @@ const handleSubmit = async () => {
     // Call the login function from the composable
     await login(data);
 
-    router.push("/");
+    window.location.href = '/';
+    // fix me router.push("/");
   } catch (error) {
     // Handle login errors here
     console.error("Login error:", error);

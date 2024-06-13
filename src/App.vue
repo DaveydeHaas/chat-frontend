@@ -4,7 +4,7 @@
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="col">
           <!-- Title of the groupchat -->
-           {{ isTokenPresent }}
+           
         </div>
         <!-- if homepage is open show logout nad create ne groupchat else just a return button -->
         <Button
@@ -13,9 +13,9 @@
           @click="logoutUser"
           >Logout</Button
         >
-        <router-link v-else to="/login"
+        <!-- <router-link v-else to="/login"
           ><Button class="btn btn-primary me-1">Login</Button></router-link
-        >
+        > -->
       </nav>
     </div>
   </div>
@@ -25,11 +25,11 @@
 </template>
 
 <script setup>
-import { RouterView, useRouter } from "vue-router";
+import { RouterView } from "vue-router";
 import useAuth from "@/composables/auth";
 import { computed, watch } from 'vue';
 
-const router = useRouter();
+//const router = useRouter();
 
 const isTokenPresent = computed(() => {
   return !!localStorage.getItem('token');
@@ -45,8 +45,8 @@ const { logout } = useAuth();
 
 const logoutUser = async () => {
   await logout();
-
-  router.push("/login");
+  window.location.href = '/login';
+  // fixme router.push("/login");
 };
 </script>
 

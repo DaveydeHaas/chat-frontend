@@ -11,7 +11,7 @@
           class="list-group-item d-flex justify-content-between align-items-center"
         >
           <h4>{{ chatroom.title }}</h4>
-          <small>{{ chatroom }}</small>
+          <small>{{ chatroom.description }}</small>
           <button
             @click="openConfirmModal(chatroom)"
             class="btn btn-primary btn-sm"
@@ -44,6 +44,7 @@ import { ref, onMounted } from "vue";
 import useChatrooms from "@/composables/chatrooms";
 import { useToast } from "vue-toastification";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
 
 const router = useRouter();
 const { chatrooms, getChatrooms, joinChatroomById } = useChatrooms();
@@ -51,6 +52,8 @@ const isLoading = ref(true);
 const selectedChatroom = ref(null);
 const confirmationModal = ref(null);
 const toast = useToast();
+
+const authStore = useAuthStore ();
 
 const openConfirmModal = (chatroom) => {
   selectedChatroom.value = chatroom;
@@ -63,8 +66,12 @@ const hideModal = () => {
 
 const joinChatroom = async () => {
   try {
-    await joinChatroomById(selectedChatroom.value.id);
-    toast.success(`Joined chatroom: ${selectedChatroom.value.name}`);
+    const currentUser = JSON.parse(authStore.user);
+   
+    if(!selectedChatroom.value.users.some(u => u.id === currentUser.id)){
+      await joinChatroomById(selectedChatroom.value.id);
+      toast.success(`Joined chatroom: ${selectedChatroom.value.name}`);
+    }
     hideModal();
 
     router.push(`/chatroom/${selectedChatroom.value.id}`);

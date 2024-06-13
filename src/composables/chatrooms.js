@@ -6,6 +6,7 @@ import { ref } from 'vue';
 
 export default function useChatrooms() {
   const toast = useToast();
+  const chatroom = ref({});
   const chatrooms = ref({});
 
   const authStore = useAuthStore();
@@ -32,6 +33,25 @@ export default function useChatrooms() {
     }
   };
 
+  const getChatroomById = async (chatroomId) => {
+    try {
+      await axios.get(`${API_BASE_URL}/getChatroomById/${chatroomId}`, {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+          user: authStore.user,
+        }
+      }).then(res =>{
+        chatroom.value = res.data.data;
+      });
+    } catch (error) {
+      toast.error('failed to retrieve active chatgroups.', {
+        position: 'bottom-right'
+      });
+
+      throw error;
+    }
+  }
+
   const joinChatroomById = async (chatroomId) => {
     try {
       await axios.post(`${API_BASE_URL}/joinChatroomById/${chatroomId}`,{user: authStore.user,}, {
@@ -49,8 +69,10 @@ export default function useChatrooms() {
   }
 
   return {
+    chatroom,
     chatrooms,
     getChatrooms,
+    getChatroomById,
     joinChatroomById
   };
 }
