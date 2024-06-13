@@ -16,10 +16,12 @@ export default function useChatrooms() {
     try {
       await axios.get(`${API_BASE_URL}/chatrooms`, {
         headers: {
-          Authorization: 'Bearer ' + authStore.token,
+          Authorization: `Bearer ${authStore.token}`,
+          user: authStore.user,
         },
       }).then(res => {
-        chatrooms.value = res.data;
+        chatrooms.value = res.data.data;
+        return;
       });
     } catch (error) {
       toast.error('failed to retrieve active chatgroups.', {
@@ -30,8 +32,25 @@ export default function useChatrooms() {
     }
   };
 
+  const joinChatroomById = async (chatroomId) => {
+    try {
+      await axios.post(`${API_BASE_URL}/joinChatroomById/${chatroomId}`,{user: authStore.user,}, {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      });
+    } catch (error) {
+      toast.error('failed to retrieve active chatgroups.', {
+        position: 'bottom-right'
+      });
+
+      throw error;
+    }
+  }
+
   return {
     chatrooms,
     getChatrooms,
+    joinChatroomById
   };
 }

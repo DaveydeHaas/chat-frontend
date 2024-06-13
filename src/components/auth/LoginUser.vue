@@ -35,7 +35,13 @@
               >New here? Create an account.</router-link
             >
           </div>
-          <button type="submit" class="btn btn-primary">Login</button>
+          <button
+            :disabled="!isFormValid"
+            type="submit"
+            class="btn btn-primary"
+          >
+            Login
+          </button>
         </form>
       </div>
     </div>
@@ -43,16 +49,24 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import useAuth from "@/composables/auth";
 
 const router = useRouter();
-
 const { login } = useAuth();
 
 const email = ref("");
 const password = ref("");
+
+const isEmailValid = computed(() => {
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailPattern.test(email.value);
+});
+
+const isFormValid = computed(() => {
+  return isEmailValid.value && password.value.length > 0;
+});
 
 const handleSubmit = async () => {
   try {

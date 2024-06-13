@@ -15,9 +15,6 @@ export default function useAuth() {
       // Store the token and user data in Pinia store
       authStore.login(token, user);
 
-      console.log(localStorage.getItem('token')); // Optional: Log token to console
-      console.log(authStore.user); // Optional: Log user data stored in Pinia
-
       return user; // Return user data if needed
 
     } catch (error) {
