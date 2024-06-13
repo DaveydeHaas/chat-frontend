@@ -6,11 +6,13 @@
           <p>Active Users:</p>
           <ul>
             <li v-for="user in activeUsers" :key="user.id">
-              {{ user.name }} <!-- I want "is typing...." here when that user is typing -->
+              {{ user.name }}
+              <!-- todo set is typing... -->
               <hr />
             </li>
           </ul>
         </div>
+        <!-- Needs to be removed by newer version -->
         <div v-if="typingUsers.length">
           <p>Typing:</p>
           <ul>
@@ -98,23 +100,23 @@ const typingUsers = ref([]);
 const userColors = ref({});
 
 const sendMessage = () => {
-  try{
+  try {
     const data = {
       text: message.value,
       name: currentUser.value.name,
       userId: currentUser.value.id,
       chatroomId: props.id,
-      }
-      // todo check if message is send
-      socket.emit("chat message", data);
-      saveMessage(data);
-      message.value = "";
+    };
+    // Emit message to server
+    socket.emit("chat message", data);
+    // Client-side save (optional, for immediate UI update)
+    saveMessage(data); // Ensure saveMessage function updates your local state
+    message.value = "";
   } catch (error) {
-    toast.error('Somethig went wrong while trying to send a message.', {
-        position: 'bottom-right'
-      });
-
-      throw error;
+    toast.error("Something went wrong while trying to send a message.", {
+      position: "bottom-right",
+    });
+    throw error;
   }
 };
 
@@ -144,6 +146,20 @@ onMounted(async () => {
   socket = io("http://localhost:3000");
 
   socket.emit("set username", currentUser.value.name);
+
+  // Emit existing messages to server on connection
+  if (chatroom.value.messages.length > 0) {
+    const formattedMessages = chatroom.value.messages.map((msg) => ({
+      ...msg,
+      name:
+        msg.userId === currentUser.value.id
+          ? currentUser.value.name
+          : chatroom.value.users.find((user) => user.id === msg.userId)?.name,
+    }));
+    formattedMessages.forEach(msg => {
+      messages.value.push(msg);
+    });
+  }
 
   socket.on("chat message", (msg) => {
     if (!userColors.value[msg.userId]) {
