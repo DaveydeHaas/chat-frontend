@@ -21,7 +21,7 @@
         </div>
       </div>
       <div class="col-9 d-flex flex-column">
-        <div class=" scroll">
+        <div class="scroll">
           <ul id="messages">
             <li
               v-for="msg in messages"
@@ -29,10 +29,14 @@
               :class="{
                 'message-item': true,
                 'my-message': msg.userId === currentUser.id,
-                'other-message': msg.userId !== currentUser.id
+                'other-message': msg.userId !== currentUser.id,
               }"
             >
-              <div v-if="msg.userId !== currentUser.id" :style="{ color: userColors[msg.userId] }" class="name">
+              <div
+                v-if="msg.userId !== currentUser.id"
+                :style="{ color: userColors[msg.userId] }"
+                class="name"
+              >
                 {{ msg.name }}
               </div>
               <div class="message-blob">{{ msg.text }}</div>
@@ -91,7 +95,7 @@ const sendMessage = () => {
   socket.emit("chat message", {
     text: message.value,
     name: currentUser.value.name,
-    userId: currentUser.value.id
+    userId: currentUser.value.id,
   });
   message.value = "";
 };
@@ -173,7 +177,7 @@ onBeforeUnmount(() => {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   padding-bottom: 8px;
-  margin-right: 20px
+  margin-right: 20px;
 }
 
 .message-item {
@@ -215,19 +219,19 @@ onBeforeUnmount(() => {
   background-color: white;
 }
 
-.scroll{
-  width:100%;
+.scroll {
+  width: 100%;
   height: 84vh;
-  overflow:scroll;
+  overflow: scroll;
 }
-.scroll::-webkit-scrollbar-track{
-  background-color: #F5F5F5;
+.scroll::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
 }
-.scroll::-webkit-scrollbar{
+.scroll::-webkit-scrollbar {
   width: 10px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
-.scroll::-webkit-scrollbar-thumb{
+.scroll::-webkit-scrollbar-thumb {
   background-color: #666666;
   border: 2px solid #797979;
 }
