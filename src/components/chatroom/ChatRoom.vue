@@ -24,7 +24,7 @@
       </div>
       <div class="col-9 d-flex flex-column">
         <div class="scroll">
-          <ul id="messages">
+          <ul id="messages" class= mt-3>
             <li
               v-for="msg in messages"
               :key="msg.id"
@@ -206,11 +206,6 @@ onBeforeUnmount(() => {
   flex-grow: 1;
   display: flex;
   flex-direction: row;
-}
-
-.left-block {
-  background-color: #f8f9fa;
-  height: 100vh;
 }
 
 .remove-curvedborder {

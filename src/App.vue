@@ -3,9 +3,25 @@
     <div class="row">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="col">
-          <router-link to="/"><img class="navbar-brand ms-4" src="../src/assets/logo.png"></router-link>
+          <router-link to="/"
+            ><img class="navbar-brand ms-4" src="../src/assets/logo.png"
+          /></router-link>
         </div>
         <!-- if homepage is open show logout nad create ne groupchat else just a return button -->
+        <router-link v-if="currentPage == 'chatroom' || currentPage == 'createChatroom'" to="/">
+          <Button
+            class="btn btn-primary me-2"
+            type="button"
+            >List</Button
+          >
+        </router-link>
+        <router-link v-else-if="currentPage == 'list'" to="/">
+          <Button
+            class="btn btn-primary me-2"
+            type="button"
+            >New chatroom</Button
+          >
+        </router-link>
         <Button
           v-if="isTokenPresent"
           class="btn btn-primary me-4"
@@ -26,25 +42,29 @@
 <script setup>
 import { RouterView } from "vue-router";
 import useAuth from "@/composables/auth";
-import { computed, watch } from 'vue';
+import { computed, watch, ref } from "vue";
 
 //const router = useRouter();
 
+const currentPage = ref('list');
+
 const isTokenPresent = computed(() => {
-  return !!localStorage.getItem('token');
+  return !!localStorage.getItem("token");
 });
 
 // Watch for changes in localStorage and update isTokenPresent accordingly
-watch(() => localStorage.getItem('token'), () => {
-  isTokenPresent.value = !!localStorage.getItem('token');
-});
+watch(
+  () => localStorage.getItem("token"),
+  () => {
+    isTokenPresent.value = !!localStorage.getItem("token");
+  }
+);
 
 const { logout } = useAuth();
 
-
 const logoutUser = async () => {
   await logout();
-  window.location.href = '/login';
+  window.location.href = "/login";
   // fixme router.push("/login");
 };
 </script>

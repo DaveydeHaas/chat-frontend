@@ -1,41 +1,37 @@
 <template>
-  <div class="container mt-4">
+  <div class="container-fluid">
     <div v-if="isLoading" class="spinner-container">
       <VueSpinner size="50" color="green" />
     </div>
     <div v-else>
-      <ul class="list-group">
-        <li
-          v-for="chatroom in chatrooms"
-          :key="chatroom.id"
-          class="list-group-item d-flex justify-content-between align-items-center"
-        >
-          <h4>{{ chatroom.title }}</h4>
-          <small>{{ chatroom.description }}</small>
-          <button
-            @click="openConfirmModal(chatroom)"
-            class="btn btn-primary btn-sm"
-          >
-            Join
-          </button>
-        </li>
-      </ul>
+      <div class="row">
+        <div class="col-3 left-block">
+          <div class="d-flex flex-column justify-content-center mt-4">
+            <button class="btn btn-primary mb-2">Profile</button>
+            <button class="btn btn-primary mb-2">Chatrooms with power</button>
+            <button class="btn btn-primary mb-2">New chatroom</button>
+          </div>
+        </div>
+        <div class="col-9 d-flex flex-column">
+          <ul class="list-group mt-3 scroll">
+            <li
+              v-for="chatroom in chatrooms"
+              :key="chatroom.id"
+              class="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <h4>{{ chatroom.title }}</h4>
+              <small>{{ chatroom.description }}</small>
+              <button
+                @click="joinChatroom(chatroom)"
+                class="btn btn-primary btn-sm"
+              >
+                Join
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-
-    <!-- Modal Section -->
-    <b-modal
-      id="confirmationModal"
-      ref="confirmationModal"
-      centered
-      title="Join Chatroom"
-      @hidden="selectedChatroom = null"
-    >
-      <p>Are you sure you want to join this chatroom?</p>
-      <template #footer>
-        <b-button variant="primary" @click="joinChatroom">Confirm</b-button>
-        <b-button variant="light" @click="hideModal">Cancel</b-button>
-      </template>
-    </b-modal>
   </div>
 </template>
 
@@ -50,29 +46,19 @@ const router = useRouter();
 const { chatrooms, getChatrooms, joinChatroomById } = useChatrooms();
 const isLoading = ref(true);
 const selectedChatroom = ref(null);
-const confirmationModal = ref(null);
 const toast = useToast();
 
-const authStore = useAuthStore ();
+const authStore = useAuthStore();
 
-const openConfirmModal = (chatroom) => {
-  selectedChatroom.value = chatroom;
-  confirmationModal.value.show();
-};
-
-const hideModal = () => {
-  confirmationModal.value.hide();
-};
-
-const joinChatroom = async () => {
+const joinChatroom = async (chatroom) => {
   try {
+    selectedChatroom.value = chatroom;
     const currentUser = JSON.parse(authStore.user);
-   
-    if(!selectedChatroom.value.users.some(u => u.id === currentUser.id)){
+
+    if (!selectedChatroom.value.users.some((u) => u.id === currentUser.id)) {
       await joinChatroomById(selectedChatroom.value.id);
       toast.success(`Joined chatroom: ${selectedChatroom.value.name}`);
     }
-    hideModal();
 
     router.push(`/chatroom/${selectedChatroom.value.id}`);
   } catch (error) {
@@ -93,5 +79,25 @@ onMounted(async () => {
   justify-content: center;
   align-items: center;
   height: 100vh;
+}
+
+.scroll {
+  width: 100%;
+  height: 91vh;
+  overflow: scroll;
+}
+.scroll::-webkit-scrollbar-track {
+  background-color: #f5f5f5;
+}
+.scroll::-webkit-scrollbar {
+  width: 7px;
+  background: #f5f5f5;
+}
+.scroll::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+.allign-buttons {
+
 }
 </style>

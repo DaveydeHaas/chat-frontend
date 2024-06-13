@@ -25,7 +25,13 @@ body {
   
 ul {
     list-style: none !important;
-  }
+}
+
+.left-block {
+    background-color: #f8f9fa;
+    height: 100vh;
+}
+
 .left-block li::before {
     content: "•"; color: #298430; font-size: 3vh;
 }
