@@ -126,6 +126,7 @@ onMounted(async () => {
       userColors.value[msg.userId] = getRandomColor();
     }
     messages.value.push(msg);
+    console.log(messages.value);
   });
 
   socket.on("online users", (users) => {
