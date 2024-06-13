@@ -3,13 +3,12 @@
     <div class="row">
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="col">
-          <!-- Title of the groupchat -->
-           
+          <router-link to="/"><img class="navbar-brand ms-4" src="../src/assets/logo.png"></router-link>
         </div>
         <!-- if homepage is open show logout nad create ne groupchat else just a return button -->
         <Button
           v-if="isTokenPresent"
-          class="btn btn-primary me-1"
+          class="btn btn-primary me-4"
           @click="logoutUser"
           >Logout</Button
         >
