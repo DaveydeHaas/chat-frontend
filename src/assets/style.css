@@ -4,13 +4,13 @@ body {
 
 
 .btn-primary {
-    background-color: #04AA6D !important;
+    background-color: #298430 !important;
     border-radius: 5px;
     font-size: 17px;
     font-family: 'Source Sans Pro', sans-serif;
-    padding: 6px, 18px; 
+    padding: 6px, 12px; 
     border-width: 0px !important;
-    border-color: #04AA6D !important;
+    border-color: #298430 !important;
 }
 
 .btn-primary:hover {
@@ -20,4 +20,12 @@ body {
 
 .navbar-brand{
     height: 8vh;
+}
+
+  
+ul {
+    list-style: none !important;
+  }
+.left-block li::before {
+    content: "•"; color: #298430; font-size: 3vh;
 }
