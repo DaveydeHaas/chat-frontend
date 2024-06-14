@@ -2,6 +2,7 @@
   <div class="container mt-4">
     <div class="card">
       <div class="card-body">
+        <h3>Login</h3>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <label for="exampleInputEmail1">E-mail</label>

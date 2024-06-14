@@ -2,6 +2,7 @@
   <div class="container mt-4">
     <div class="card">
       <div class="card-body">
+        <h3>Create account</h3>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
             <label for="username">Username</label>

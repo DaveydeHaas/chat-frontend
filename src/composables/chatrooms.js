@@ -22,7 +22,6 @@ export default function useChatrooms() {
         },
       }).then(res => {
         chatrooms.value = res.data.data;
-        return;
       });
     } catch (error) {
       toast.error('failed to retrieve active chatgroups.', {
@@ -76,12 +75,32 @@ export default function useChatrooms() {
       });
   }
 
+  const createChatroom = async (data) => {
+    try {
+      await axios.post(`${API_BASE_URL}/createChatroom`,{data}, {
+        headers: {
+          Authorization: `Bearer ${authStore.token}`,
+        },
+      }).then(res => {
+        chatroom.value = res.data.data;
+      });
+    } catch (error) {
+      toast.error('failed to retrieve active chatgroups.', {
+        position: 'bottom-right'
+      });
+
+      throw error;
+    }
+  }
+
+
   return {
     chatroom,
     chatrooms,
     getChatrooms,
     getChatroomById,
     joinChatroomById,
-    saveMessage
+    saveMessage,
+    createChatroom,
   };
 }

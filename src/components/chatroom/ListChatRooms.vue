@@ -7,9 +7,9 @@
       <div class="row">
         <div class="col-3 left-block">
           <div class="d-flex flex-column justify-content-center mt-4">
-            <button class="btn btn-primary mb-2">Profile</button>
-            <button class="btn btn-primary mb-2">Chatrooms with power</button>
-            <button class="btn btn-primary mb-2">New chatroom</button>
+            <button class="btn btn-primary mb-2" disabled>Profile</button>
+            <button class="btn btn-primary mb-2" disabled>Chatrooms with power</button>
+            <router-link class="btn btn-primary" to="/create-chatroom">New chatroom</router-link>
           </div>
         </div>
         <div class="col-9 d-flex flex-column">
@@ -95,9 +95,5 @@ onMounted(async () => {
 }
 .scroll::-webkit-scrollbar-thumb {
   background: #ccc;
-}
-
-.allign-buttons {
-
 }
 </style>

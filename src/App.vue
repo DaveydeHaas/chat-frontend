@@ -15,13 +15,6 @@
             >List</Button
           >
         </router-link>
-        <router-link v-else-if="currentPage == 'list'" to="/">
-          <Button
-            class="btn btn-primary me-2"
-            type="button"
-            >New chatroom</Button
-          >
-        </router-link>
         <Button
           v-if="isTokenPresent"
           class="btn btn-primary me-4"
